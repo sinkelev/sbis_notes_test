@@ -127,3 +127,15 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+.vscode/
+
+allure-report
+reports
+
+.idea/
+
+js_errors/
+result.db
+screenshots
+test-reports
