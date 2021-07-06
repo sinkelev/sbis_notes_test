@@ -30,12 +30,12 @@ class TestNotes(TestCaseUI):
         notes_page.add_note()
         note_editor = NoteEditor(self.driver)
         note_editor.create(note_text)
-        notes_page.check_exist(note_text)
+        notes_page.check_exist(note_text, msg='Не сохранилась')
 
         log('Удаление заметки')
         notes_page.open_note(note_text)
         note_editor.delete()
-        notes_page.check_exist(note_text, False)
+        notes_page.check_exist(note_text, False, msg='Не удалена')
 
 
 if __name__ == '__main__':

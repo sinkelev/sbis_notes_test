@@ -20,6 +20,7 @@ class SubmitPopup(Region):
         """
 
         self.check_open()
+        delay(1, message='Анимация диалогового окна')
         if confirm:
             self.positive_btn.click()
         else:
@@ -51,9 +52,9 @@ class NoteEditor(Region):
     def save(self):
         """Сохранение заметки"""
 
-        self.check_open_editor()
+        self.check_open()
         self.ok_btn.click()
-        self.check_close_editor()
+        self.check_close()
 
     def create(self, note_text):
         """Создание заметки
@@ -63,24 +64,23 @@ class NoteEditor(Region):
         self.note_input_elm.type_in(note_text)
         delay(0.5, message='Ввод текста')
         self.save()
-        self.check_close_editor()
+        self.check_close()
 
     def delete(self):
         """Удаление заметки"""
 
-        self.check_open_editor()
+        self.check_open()
         self.remove_elm.click()
-        delay(1, message='Анимация диалогового окна')
         self.submit_popup.confirm_delete()
-        self.check_close_editor()
+        self.check_close()
 
-    def check_open_editor(self):
+    def check_open(self):
         """Проверка открытия"""
 
         self.ok_btn.should_be(Displayed,
                               msg='Редактор заметок не открылся')
 
-    def check_close_editor(self):
+    def check_close(self):
         """Проверка, что закрылась"""
 
         self.ok_btn.should_be(Hidden, msg='Редактор заметки не закрылся')
@@ -98,7 +98,6 @@ class NotesPage(Region):
         """Создание заметк"""
         self.check_load()
         self.add_note_btn.click()
-        self.note_editor.check_open_editor()
 
     def open_note(self,  note_text):
         """Открытие заметки
@@ -108,18 +107,21 @@ class NotesPage(Region):
         self.check_load()
         self.notes_cslst.item(contains_text=note_text).click()
 
-    def check_exist(self, note_text, present=True):
+    def check_exist(self, note_text, present=True, msg=''):
         """Проверка отображения заметки
         :param note_text: (string) текст заметки
         :param present: (True/False) Должен/Не должен присутствовать
+        :param msg: Сообщение
         """
 
         if present:
             self.notes_cslst.item(contains_text=note_text) \
-                .should_be(Displayed, msg=f'Заметка c текстом {note_text} не сохранилась')
+                .should_be(Displayed,
+                           msg=f'Заметка c текстом {note_text} не отображается. {msg}')
         else:
             self.notes_cslst.item(contains_text=note_text) \
-                .should_be(Hidden, msg=f'Заметка c текстом {note_text} не удалена')
+                .should_be(Hidden,
+                           msg=f'Заметка c текстом {note_text} не отображается. {msg}')
 
     def check_load(self):
         """Проверка загрузки страницы"""
