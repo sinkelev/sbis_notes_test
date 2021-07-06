@@ -27,11 +27,15 @@ class TestNotes(TestCaseUI):
         main = MainPage(self.driver)
         main.go_to('Документы', 'Заметки')
         notes_page = NotesPage(self.driver)
-        notes_page.create_note(note_text)
+        notes_page.add_note()
+        note_editor = NoteEditor(self.driver)
+        note_editor.create(note_text)
+        notes_page.check_exist(note_text)
 
         log('Удаление заметки')
         notes_page.open_note(note_text)
-        notes_page.delete_note(note_text)
+        note_editor.delete()
+        notes_page.check_exist(note_text, False)
 
 
 if __name__ == '__main__':

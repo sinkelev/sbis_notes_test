@@ -20,7 +20,6 @@ class SubmitPopup(Region):
         """
 
         self.check_open()
-        delay(0.5, message='Анимация диалогового окна')
         if confirm:
             self.positive_btn.click()
         else:
@@ -56,12 +55,22 @@ class NoteEditor(Region):
         self.ok_btn.click()
         self.check_close_editor()
 
+    def create(self, note_text):
+        """Создание заметки
+        :param note_text: (string) текст заметки
+        """
+
+        self.note_input_elm.type_in(note_text)
+        delay(0.5, message='Ввод текста')
+        self.save()
+        self.check_close_editor()
+
     def delete(self):
         """Удаление заметки"""
 
         self.check_open_editor()
         self.remove_elm.click()
-        delay(0.5, message='Анимация диалогового окна')
+        delay(1, message='Анимация диалогового окна')
         self.submit_popup.confirm_delete()
         self.check_close_editor()
 
@@ -85,21 +94,13 @@ class NotesPage(Region):
 
     note_editor     = NoteEditor()
 
-    def create_note(self, note_text):
-        """Создание заметки
-        :param note_text: (string) текст заметки
-        """
-
+    def add_note(self):
+        """Создание заметк"""
         self.check_load()
         self.add_note_btn.click()
         self.note_editor.check_open_editor()
-        self.note_editor.note_input_elm.type_in(note_text)
-        delay(0.5, message='Ввод текста')
-        self.note_editor.save()
-        self.notes_cslst.item(contains_text=note_text)\
-            .should_be(Displayed, msg='Заметка не сохранилась')
 
-    def open_note(self, note_text):
+    def open_note(self,  note_text):
         """Открытие заметки
         :param note_text: (string) текст заметки, которую необходимо удалить
         """
@@ -107,19 +108,18 @@ class NotesPage(Region):
         self.check_load()
         self.notes_cslst.item(contains_text=note_text).click()
 
-    def delete_note(self, note_text):
-        """Удаление заметки
-        :param note_text: (string) текст заметки, которую необходимо удалить
+    def check_exist(self, note_text, present=True):
+        """Проверка отображения заметки
+        :param note_text: (string) текст заметки
+        :param present: (True/False) Должен/Не должен присутствовать
         """
 
-        self.note_editor.delete()
-        self.check_exist(note_text)
-
-    def check_exist(self, note_text):
-        """Проверка отображения элемента"""
-
-        self.notes_cslst.item(contains_text=note_text)\
-            .should_be(Hidden, msg='Заметка не удалена')
+        if present:
+            self.notes_cslst.item(contains_text=note_text) \
+                .should_be(Displayed, msg=f'Заметка c текстом {note_text} не сохранилась')
+        else:
+            self.notes_cslst.item(contains_text=note_text) \
+                .should_be(Hidden, msg=f'Заметка c текстом {note_text} не удалена')
 
     def check_load(self):
         """Проверка загрузки страницы"""
