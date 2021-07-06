@@ -113,7 +113,7 @@ class NotesPage(Region):
         """
 
         self.note_editor.delete()
-        self.check_delete(note_text)
+        self.check_exist(note_text)
 
     def check_exist(self, note_text):
         """Проверка отображения элемента"""
