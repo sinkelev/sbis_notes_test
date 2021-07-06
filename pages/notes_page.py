@@ -21,7 +21,10 @@ class SubmitPopup(Region):
 
         self.check_open()
         delay(0.5, message='Анимация диалогового окна')
-        self.positive_btn.click() if confirm else self.negative_btn.click()
+        if confirm:
+            self.positive_btn.click()
+        else:
+            self.negative_btn.click()
         self.check_close()
 
     def check_open(self):
@@ -96,20 +99,27 @@ class NotesPage(Region):
         self.notes_cslst.item(contains_text=note_text)\
             .should_be(Displayed, msg='Заметка не сохранилась')
 
-    def delete_note(self, note_text):
-        """Удаление заметки
+    def open_note(self, note_text):
+        """Открытие заметки
         :param note_text: (string) текст заметки, которую необходимо удалить
         """
 
         self.check_load()
         self.notes_cslst.item(contains_text=note_text).click()
+
+    def delete_note(self, note_text):
+        """Удаление заметки
+        :param note_text: (string) текст заметки, которую необходимо удалить
+        """
+
         self.note_editor.delete()
         self.check_delete(note_text)
 
-    def check_delete(self, note_text):
-        """Проверка удаления"""
+    def check_exist(self, note_text):
+        """Проверка отображения элемента"""
 
-        self.notes_cslst.item(contains_text=note_text).should_be(Hidden)
+        self.notes_cslst.item(contains_text=note_text)\
+            .should_be(Hidden, msg='Заметка не удалена')
 
     def check_load(self):
         """Проверка загрузки страницы"""

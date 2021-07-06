@@ -7,7 +7,7 @@ from atf.ui import TestCaseUI
 
 from pages.auth_page import AuthPage
 from pages.main_page import MainPage
-from pages.notes_page import NotesPage
+from pages.notes_page import NotesPage, NoteEditor
 
 
 class TestNotes(TestCaseUI):
@@ -30,7 +30,8 @@ class TestNotes(TestCaseUI):
         notes_page.create_note(note_text)
 
         log('Удаление заметки')
-        NotesPage(self.driver).delete_note(note_text)
+        notes_page.open_note(note_text)
+        notes_page.delete_note(note_text)
 
 
 if __name__ == '__main__':
