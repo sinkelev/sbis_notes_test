@@ -45,16 +45,15 @@ class NoteEditor(Region):
 
     note_input_elm  = Element(  By.CSS_SELECTOR, '[sbisname="noteContent"]', 'Ввод заметки')
     ok_btn          = Button(   By.CSS_SELECTOR, '[sbisname="okButton"]', 'Ок')
-    remove_elm      = Element(  By.CSS_SELECTOR, '[sbisname="Remove"]', 'Удалить')
+    remove_lnk      = Link(     By.CSS_SELECTOR, '[sbisname="Remove"]', 'Удалить')
 
-    submit_popup    = SubmitPopup()
+    submit_popup    = SubmitPopup() # Диалоговое окно
 
     def save(self):
         """Сохранение заметки"""
 
         self.check_open()
         self.ok_btn.click()
-        self.check_close()
 
     def create(self, note_text):
         """Создание заметки
@@ -70,7 +69,7 @@ class NoteEditor(Region):
         """Удаление заметки"""
 
         self.check_open()
-        self.remove_elm.click()
+        self.remove_lnk.click()
         self.submit_popup.confirm_delete()
         self.check_close()
 
